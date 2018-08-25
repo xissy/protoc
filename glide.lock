@@ -1,8 +1,6 @@
-hash: 25057037f8f9a7db1257afe70d4fddf8e55e9ab9dc2f820fbd7e53c9208ae289
-updated: 2018-08-25T16:04:08.540398-07:00
+hash: dba2c2ce864ed8b6e031679e300908bdb5e447c755947677402586fc37af898d
+updated: 2018-08-25T16:34:30.065531-07:00
 imports:
-- name: github.com/ckaznocha/protoc-gen-lint
-  version: 68a05858965b31eb872cbeb8d027507a94011acc
 - name: github.com/golang/protobuf
   version: aa810b61a9c79d51363740d207bb46cf8e620ed5
 - name: github.com/grpc-ecosystem/grpc-gateway
