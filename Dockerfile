@@ -26,6 +26,10 @@ RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
         glide init --non-interactive && \
         glide install && \
         go install
+RUN cd vendor/github.com/ckaznocha/protoc-gen-lint && \
+        glide init --non-interactive && \
+        glide install && \
+        go install
 
 
 FROM alpine:3.7
