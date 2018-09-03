@@ -39,7 +39,7 @@ ENV GOPATH=/go \
 COPY --from=protoc_builder ${OUTDIR} /
 COPY --from=protoc_builder $GOPATH/bin $GOPATH/bin
 COPY --from=protoc_builder \
-        $GOPATH/src/github.com/xissy/protoc/vendor/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-        $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
+        $GOPATH/src/github.com/xissy/protoc/vendor/github.com/grpc-ecosystem/grpc-gateway \
+        $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway
 
 ENTRYPOINT ["protoc"]
