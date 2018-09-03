@@ -1,7 +1,8 @@
-FROM alpine:3.7 as protoc_builder
+FROM alpine:3.8 as protoc_builder
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 RUN apk add --no-cache build-base autoconf automake libtool make curl git go glide python2
 
-ENV PROTOBUF_TAG='v3.5.1' \
+ENV PROTOBUF_TAG='v3.6.1' \
     GOPATH=/go \
     PATH=$PATH:/go/bin/ \
     OUTDIR=/out
@@ -29,7 +30,7 @@ RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
 RUN go get github.com/ckaznocha/protoc-gen-lint
 
 
-FROM alpine:3.7
+FROM alpine:3.8
 RUN apk add --no-cache libstdc++
 
 ENV GOPATH=/go \
