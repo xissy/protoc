@@ -1,22 +1,14 @@
-FROM alpine:3.8 as protoc_builder
-RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
-RUN apk add --no-cache build-base autoconf automake libtool make curl git go glide python2
-
+#####
+FROM golang:1.11.4-stretch as protoc_builder
 ENV PROTOBUF_TAG='v3.6.1' \
     GOPATH=/go \
     PATH=$PATH:/go/bin/ \
     OUTDIR=/out
-
-RUN git clone https://github.com/google/protobuf -b $PROTOBUF_TAG --depth 1
-WORKDIR ./protobuf
-RUN autoreconf -f -i -Wall,no-obsolete && \
-    ./configure --prefix=/usr --enable-static=no && \
-    make -j2 && make install DESTDIR=${OUTDIR}
-RUN find ${OUTDIR} -name "*.a" -delete -or -name "*.la" -delete
-
 RUN mkdir -p /go/bin
 COPY . $GOPATH/src/github.com/xissy/protoc
 WORKDIR $GOPATH/src/github.com/xissy/protoc
+
+RUN curl https://glide.sh/get | sh
 RUN glide install
 RUN cd vendor/github.com/golang/protobuf && make all
 RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway && \
@@ -28,19 +20,44 @@ RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
         glide install && \
         go install
 RUN go get github.com/ckaznocha/protoc-gen-lint
+RUN go get github.com/xissy/protoc-gen-swiftgrpcrx
+RUN go install github.com/xissy/protoc-gen-swiftgrpcrx
 
 
-FROM alpine:3.8
-RUN apk add --no-cache libstdc++
+#####
+FROM swift:4.2.1 as swift_builder
+RUN apt update && apt install -y libnghttp2-dev
+ENV SWIFT_GRPC_VERSION=metadata \
+    SWIFT_GRPC_REPO=xissy
+WORKDIR /
+RUN git clone -b ${SWIFT_GRPC_VERSION} https://github.com/${SWIFT_GRPC_REPO}/grpc-swift && \
+    cd grpc-swift && \
+    make
 
-ENV GOPATH=/go \
+
+#####
+FROM swift:4.2.1
+RUN apt update && apt install -y libnghttp2-dev unzip
+
+ENV PROTOC_VERSION='3.6.1' \
+    GOPATH=/go \
     PATH=$PATH:/go/bin/ \
     OUTDIR=/out
+RUN curl -O -L https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip \
+    && unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d /usr \
+    && rm -rf protoc-${PROTOC_VERSION}-linux-x86_64.zip
 
-COPY --from=protoc_builder ${OUTDIR} /
 COPY --from=protoc_builder $GOPATH/bin $GOPATH/bin
 COPY --from=protoc_builder \
         $GOPATH/src/github.com/xissy/protoc/vendor/github.com/grpc-ecosystem/grpc-gateway \
         $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway
+COPY --from=protoc_builder \
+        $GOPATH/src/github.com/xissy/protoc/vendor/github.com/lyft/protoc-gen-validate \
+        $GOPATH/src/github.com/lyft/protoc-gen-validate
+COPY --from=swift_builder /grpc-swift /grpc-swift
+RUN for p in protoc-gen-swift protoc-gen-swiftgrpc; do \
+        ln -s /grpc-swift/${p} /usr/bin/${p}; \
+    done
 
 ENTRYPOINT ["protoc"]
+

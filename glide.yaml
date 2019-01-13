@@ -2,7 +2,10 @@ package: github.com/xissy/protoc
 import:
 - package: github.com/golang/protobuf
   version: ~1.2.0
-- package: github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+- package: github.com/grpc-ecosystem/grpc-gateway
   version: ~1.6.4
-- package: github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-swagger
-  version: ~1.6.4
+  subpackages:
+  - protoc-gen-grpc-gateway
+  - protoc-gen-grpc-swagger
+- package: github.com/lyft/protoc-gen-validate
+  version: ~0.0.12
