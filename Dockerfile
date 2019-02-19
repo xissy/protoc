@@ -1,5 +1,5 @@
 #####
-FROM golang:1.11.4-stretch as protoc_builder
+FROM golang:1.11.5-stretch as protoc_builder
 ENV PROTOBUF_TAG='v3.6.1' \
     GOPATH=/go \
     PATH=$PATH:/go/bin/ \
