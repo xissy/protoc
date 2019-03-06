@@ -19,6 +19,10 @@ RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
         glide init --non-interactive && \
         glide install && \
         go install
+RUN cd vendor/github.com/lyft/protoc-gen-validate && \
+        glide init --non-interactive && \
+        glide install && \
+        go install
 RUN go get github.com/ckaznocha/protoc-gen-lint
 RUN go get github.com/xissy/protoc-gen-swiftgrpcrx
 RUN go install github.com/xissy/protoc-gen-swiftgrpcrx
