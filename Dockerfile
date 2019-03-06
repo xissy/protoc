@@ -1,5 +1,5 @@
 #####
-FROM golang:1.11.4-stretch as protoc_builder
+FROM golang:1.11.5-stretch as protoc_builder
 ENV PROTOBUF_TAG='v3.6.1' \
     GOPATH=/go \
     PATH=$PATH:/go/bin/ \
@@ -31,8 +31,8 @@ RUN go install github.com/xissy/protoc-gen-swiftgrpcrx
 #####
 FROM swift:4.2.1 as swift_builder
 RUN apt update && apt install -y libnghttp2-dev
-ENV SWIFT_GRPC_VERSION=metadata \
-    SWIFT_GRPC_REPO=xissy
+ENV SWIFT_GRPC_VERSION=master \
+    SWIFT_GRPC_REPO=grpc
 WORKDIR /
 RUN git clone -b ${SWIFT_GRPC_VERSION} https://github.com/${SWIFT_GRPC_REPO}/grpc-swift && \
     cd grpc-swift && \
