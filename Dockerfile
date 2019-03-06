@@ -1,5 +1,5 @@
 #####
-FROM golang:1.11.5-stretch as protoc_builder
+FROM golang:1.12.0-stretch as protoc_builder
 ENV PROTOBUF_TAG='v3.6.1' \
     GOPATH=/go \
     PATH=$PATH:/go/bin/ \
@@ -20,8 +20,6 @@ RUN cd vendor/github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger && \
         glide install && \
         go install
 RUN cd vendor/github.com/lyft/protoc-gen-validate && \
-        glide init --non-interactive && \
-        glide install && \
         go install
 RUN go get github.com/ckaznocha/protoc-gen-lint
 RUN go get github.com/xissy/protoc-gen-swiftgrpcrx
