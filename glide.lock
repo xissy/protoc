@@ -1,13 +1,11 @@
-hash: 5b4f7941483af777d4b1aaf3b4226e0c9561678e4dd39e739f9d3b5b20c18190
-updated: 2019-03-05T23:21:04.469653-08:00
+hash: 614eb7a301cf3b930b46766a81bfe0e9ec0ce31f7df598cf9325da95fe7113df
+updated: 2019-09-14T18:08:52.502055+09:00
 imports:
 - name: github.com/golang/protobuf
-  version: aa810b61a9c79d51363740d207bb46cf8e620ed5
+  version: 6c65a5562fc06764971b7c5d05c76c75e84bdbf7
 - name: github.com/grpc-ecosystem/grpc-gateway
-  version: ae4bb97e7718691c8e0742a7c07989c91630e042
+  version: 471f45a5a99a578de7a8638dc7ed29e245bde097
   subpackages:
   - protoc-gen-grpc-gateway
   - protoc-gen-grpc-swagger
-- name: github.com/lyft/protoc-gen-validate
-  version: 4349a359d42fdfee53b85dd5c89a2f169e1dc6b2
 testImports: []
